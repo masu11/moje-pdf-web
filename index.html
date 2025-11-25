@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Veřejná PDF (max 3)</title>
+  <style>
+    body{font-family:Segoe UI,Roboto,Arial;margin:0;display:flex;flex-direction:column;height:100vh}
+    header{padding:12px;background:#0b5;display:flex;gap:8px;align-items:center}
+    header h1{margin:0;font-size:1rem;color:#003}
+    .buttons{display:flex;gap:8px;flex-wrap:wrap}
+    .buttons button{padding:8px 12px;border:0;border-radius:6px;cursor:pointer;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.1)}
+    .buttons button.active{background:#003;color:#fff}
+    .viewer{flex:1;background:#eee;display:flex;flex-direction:column}
+    .frame-wrap{flex:1;min-height:0}
+    iframe{width:100%;height:100%;border:0}
+    .controls{padding:8px;background:#f7f7f7;display:flex;justify-content:space-between;gap:8px;align-items:center}
+    .open-new{padding:6px 10px;border-radius:6px;border:0;background:#0066cc;color:#fff;text-decoration:none}
+    @media(max-width:600px){ header{flex-direction:column;align-items:stretch} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Veřejná PDF — klikni pro zobrazení</h1>
+    <div class="buttons" id="btns">
+      <!-- UPRAV názvy souborů níže na své skutečné názvy -->
+      <button data-src="doc1.pdf" class="active">Okresní přebor</button>
+      <button data-src="doc2.pdf">PDF 2 — (název)</button>
+      <button data-src="doc3.pdf">Okresní soutěž futsalu II.třídy</button>
+    </div>
+  </header>
+
+  <div class="viewer">
+    <div class="frame-wrap">
+      <iframe id="pdfFrame" src="doc1.pdf"></iframe>
+    </div>
+    <div class="controls">
+      <div id="currentFile">Aktuální: doc1.pdf</div>
+      <div>
+        <a id="openNew" class="open-new" target="_blank" rel="noopener">Otevřít v nové kartě</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const btns = document.getElementById('btns');
+    const frame = document.getElementById('pdfFrame');
+    const openNew = document.getElementById('openNew');
+    const currentFileLabel = document.getElementById('currentFile');
+
+    btns.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if(!b) return;
+      for(const btn of btns.querySelectorAll('button')) btn.classList.remove('active');
+      b.classList.add('active');
+      const src = b.dataset.src;
+      frame.src = src;
+      openNew.href = src;
+      currentFileLabel.textContent = 'Aktuální: ' + src;
+    });
+
+    openNew.href = frame.src;
+  </script>
+</body>
+</html>
